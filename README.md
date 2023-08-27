@@ -17,6 +17,6 @@ Um programa de conversão de moedas que permite aos usuários converterem valore
 - Raphael Pedra - Frontend Developer
 
 # Tecnologias
-- Frontend - JavaScript, ReactJS, HTML, CSS
+- Frontend - JavaScript, ReactJS, HTML, CSS, Figma
 - Backend - JavaScript, Node.js
-- Banco de Dados - PostgreSQL
+- Banco de Dados - SQLite
