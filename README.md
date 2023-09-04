@@ -1,4 +1,5 @@
 # Conversor de Câmbio
+# Conversor de Câmbio
 Repositório criado para o desenvolvimento do trabalho prático 1 da disciplina de Engenharia de Software do segundo semestre de 2023, turma TN. 
 
 # Descrição do Trabalho
@@ -20,3 +21,28 @@ Um programa de conversão de moedas que permite aos usuários converterem valore
 - Frontend - JavaScript, ReactJS, HTML, CSS, Figma
 - Backend - JavaScript, Node.js
 - Banco de Dados - SQLite
+
+# Backlog
+### Como um usuário, quero ver uma lista de todas as moedas disponíveis para conversão.
+- Instalar Javascript e Node.Js [Felipe e Eduardo] - 2 SP
+- Instalar Javascript e ReactJS [Miguel e Rafael] - 2 SP
+- Implementar versão inicial da tela principal [Raphael] - 10 SP
+- Implementar básico da comunicação com API [Eduardo] - 8 SP
+- Obter lista de todas a moedas disponíveis para conversão [Felipe] - 5 SP
+- Exibir uma lista de opções [Miguel] - 5 SP
+### Como um usuário, quero poder selecionar a moeda de origem e destino para a conversão de câmbio.
+- Criar botões para seleção de moeda [Miguel] - 3 SP
+- Pegar da API as informações sobre as moedas escolhidas [Felipe] - 3 SP
+### Como um usuário, quero ver a taxa de câmbio atual entre as moedas selecionadas.
+- Criar um campo para visualização do valor da conversão das moedas [Raphael] - 3 SP
+- Pegar da API o valor de câmbio entre as moedas [Eduardo] - 2 SP
+### Como um usuário, quero inserir o valor que desejo converter.
+- Criar campo para o usuário digitar o valor que deseja converter da moeda [Miguel] - 2 SP
+- Fazer a fórmula para a conversão do valor escolhido [Raphael] - 4 SP
+
+### Como um usuário, quero que o sistema calcule automaticamente o valor convertido.
+### Como um usuário, quero que o sistema calcule automaticamente o valor convertido.
+### Como um usuário, quero poder filtrar a lista de moedas por nome ou código.
+### Como um usuário, quero ver informações detalhadas sobre cada moeda, como símbolo e país.
+### Como um usuário, quero poder atualizar manualmente as taxas de câmbio.
+### Como um usuário, quero ver a data e hora da última atualização das taxas de câmbio.
