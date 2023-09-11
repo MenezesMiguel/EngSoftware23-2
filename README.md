@@ -46,3 +46,6 @@ Um programa de conversão de moedas que permite aos usuários converterem valore
 ### Como um usuário, quero ver informações detalhadas sobre cada moeda, como símbolo e país.
 ### Como um usuário, quero poder atualizar manualmente as taxas de câmbio.
 ### Como um usuário, quero ver a data e hora da última atualização das taxas de câmbio.
+### Como um usuário, quero ver em um gráfico o histórico da taxa de câmbio selecionada.
+### Como um usuário, quero poder fazer login na plataforma.
+### Como um usuário, quero visualizar meu histórico de conversão de câmbio.
