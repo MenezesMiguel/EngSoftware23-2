@@ -1,0 +1,48 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #8b7ebc;
+  /* display */
+}
+
+.logo {
+  width: auto;
+}
+
+.menu {
+  margin-right: 20px;
+  color: #f8d94a;
+}
+
+.menu ul {
+  list-style: none;
+  display: flex;
+}
+
+.menu li {
+  margin-left: 10px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #333333;
+}
+
+.login-btn-header-container {
+  display: flex;
+}
+
+.login-header-btn {
+  text-decoration: none;
+  color: #333333;
+  background-color: #f8d94a;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  border-radius: 10px;
+  width: max(7vw, 10px);
+  height: max(3.5vw, 5px);
+}
