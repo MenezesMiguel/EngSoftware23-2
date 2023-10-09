@@ -1,14 +1,10 @@
 import React from "react";
-import Header from "./components/header/header";
-import Footer from "./components/footer/footer";
-import SignInWall from "./components/sign-in-wall/sign-in-wall";
+import Router from "./routes";
 
 function App() {
   return (
     <>
-      <Header />
-      <SignInWall />
-      <Footer />
+      <Router />
     </>
   );
 }

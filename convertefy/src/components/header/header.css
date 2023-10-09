@@ -44,4 +44,5 @@
   border-radius: 10px;
   width: max(7vw, 10px);
   height: max(3.5vw, 5px);
+  cursor: pointer;
 }
