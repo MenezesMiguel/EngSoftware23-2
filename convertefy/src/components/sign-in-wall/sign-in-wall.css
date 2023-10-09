@@ -1,0 +1,70 @@
+.signIncontainer {
+  width: 100%;
+  height: fit-content;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  color: #f8d94a;
+  font-size: 16px;
+}
+
+.card {
+  background-color: #8b7ebc;
+  padding: 40px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.card-header {
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  margin: 10px;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.line {
+  width: 100%;
+  margin-bottom: 20px;
+}
+#float-label {
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  position: relative;
+}
+
+#float-label input {
+  width: 100%;
+  height: 56px;
+  outline: 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+#float-label label {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0 12px;
+  color: #999;
+  pointer-events: none;
+  position: absolute;
+  transform: translate(0, 26px) scale(1);
+  transform-origin: top left;
+  transition: all 0.2s ease-out;
+}
+
+#float-label:focus-within label {
+  transform: translate(0, 12px) scale(0.75);
+}
+
+#float-label .Active {
+  transform: translate(0, 12px) scale(0.75);
+}
