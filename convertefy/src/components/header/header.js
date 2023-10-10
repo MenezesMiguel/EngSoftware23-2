@@ -10,10 +10,12 @@ function Header() {
       </div>
       <div class="menu">
         <ul>
-          <li>Início</li>
-          <li>Sobre</li>
-          <li>Serviços</li>
-          <li>Contato</li>
+          <li class="headerNavigation" href="google.com">
+            Início
+          </li>
+          <li class="headerNavigation">Sobre</li>
+          <li class="headerNavigation">Serviços</li>
+          <li class="headerNavigation">Contato</li>
         </ul>
       </div>
       <div class="login-btn-header-container">

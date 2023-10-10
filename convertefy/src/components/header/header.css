@@ -46,3 +46,7 @@
   height: max(3.5vw, 5px);
   cursor: pointer;
 }
+
+.headerNavigation {
+  cursor: pointer;
+}
