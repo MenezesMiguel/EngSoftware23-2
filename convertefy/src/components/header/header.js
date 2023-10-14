@@ -1,12 +1,13 @@
 import React from "react";
-import logo from "../../images/logo2.png";
+import logo from "../../Images/logo2.png";
 import "./header.css";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
     <div class="header">
       <div class="logo">
-        <img src={logo} alt="Logo do site" />
+      <Link to="/"><img src={logo} alt="Logo do site" /></Link>
       </div>
       <div class="menu">
         <ul>
@@ -20,7 +21,7 @@ function Header() {
       </div>
       <div class="login-btn-header-container">
         <button class="login-header-btn" onClick={() => console.log("aha")}>
-          Login
+          <Link to="/login">Login</Link>
         </button>
       </div>
     </div>
