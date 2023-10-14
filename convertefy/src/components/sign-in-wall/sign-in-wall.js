@@ -1,4 +1,4 @@
-import React, { useState, setValue } from "react";
+import React, { useState } from "react";
 import "./sign-in-wall.css";
 
 function SignInWall() {
