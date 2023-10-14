@@ -1,7 +1,8 @@
 .signIncontainer {
   width: 100%;
   height: fit-content;
-  margin: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   color: #f8d94a;

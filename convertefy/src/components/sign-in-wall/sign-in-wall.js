@@ -4,6 +4,8 @@ import "./sign-in-wall.css";
 function SignInWall() {
   const [isActive, setIsActive] = useState(false);
   const [value, setValue] = useState("");
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
 
   function handleTextChange(text) {
     setValue(text);
@@ -13,6 +15,10 @@ function SignInWall() {
     } else {
       setIsActive(false);
     }
+  }
+
+  function login() {
+    console.log(email, password);
   }
 
   return (
@@ -25,7 +31,10 @@ function SignInWall() {
               <input
                 type="email"
                 value={value}
-                onChange={(e) => handleTextChange(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  handleTextChange(e.target.value);
+                }}
               />
               <label className={isActive ? "Active" : ""} htmlFor="email">
                 E-mail
@@ -34,18 +43,21 @@ function SignInWall() {
           </div>
           <div class="line">
             <div id="float-label">
-              <input type="password" />
+              <input
+                type="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  handleTextChange(e.target.value);
+                }}
+              />
               <label className={isActive ? "Active" : ""} htmlFor="senha">
                 Senha
               </label>
             </div>
           </div>
-          <button class="login-header-btn" onClick={() => console.log("aha")}>
+          <button class="login-header-btn" onClick={() => login()}>
             Login
           </button>
-          {/* <button type="submit" class="btn btn-primary">
-            Submit
-          </button> */}
         </div>
       </div>
     </div>
