@@ -3,8 +3,8 @@ import axios from "axios";
 import Dropdown from "react-dropdown";
 import { HiSwitchHorizontal } from "react-icons/hi";
 import "react-dropdown/style.css";
-import "./HomePage.css";
 import HistoricoConversoes from "../history/historyPage";
+import "./HomePage.css";
 
 function HomePage() {
   const [info, setInfo] = useState({});
@@ -14,6 +14,9 @@ function HomePage() {
   const [options, setOptions] = useState([]);
   const [output, setOutput] = useState(0);
   const [savedConversions, setSavedConversions] = useState([]);
+  const [lastUpdateTime, setLastUpdateTime] = useState(null);
+  const [searchFrom, setSearchFrom] = useState(""); // Estado para pesquisa "De"
+  const [searchTo, setSearchTo] = useState(""); // Estado para pesquisa "Para"
 
   useEffect(() => {
     axios
@@ -22,6 +25,7 @@ function HomePage() {
       )
       .then((res) => {
         setInfo(res.data[from]);
+        setLastUpdateTime(new Date());
       });
   }, [from]);
 
@@ -58,6 +62,28 @@ function HomePage() {
     setSavedConversions([...savedConversions, savedConversion]);
   }
 
+  function handleFromChange(selected) {
+    setFrom(selected.value);
+  }
+
+  function handleToChange(selected) {
+    setTo(selected.value);
+  }
+
+  function filterFromCurrencies() {
+    const filteredFromOptions = Object.keys(info).filter((currency) =>
+      currency.toLowerCase().includes(searchFrom.toLowerCase())
+    );
+    setOptions(filteredFromOptions);
+  }
+
+  function filterToCurrencies() {
+    const filteredToOptions = Object.keys(info).filter((currency) =>
+      currency.toLowerCase().includes(searchTo.toLowerCase())
+    );
+    setOptions(filteredToOptions);
+  }
+
   return (
     <div className="App">
       <p>Conversor de Moedas Online</p>
@@ -72,11 +98,18 @@ function HomePage() {
         </div>
         <div className="middle">
           <h3>De</h3>
+          <div className="currency-input">
+            <input
+              type="text"
+              placeholder="Escolha uma moeda"
+              value={searchFrom}
+              onChange={(e) => setSearchFrom(e.target.value)}
+            />
+            <button onClick={filterFromCurrencies}>Filtrar</button>
+          </div>
           <Dropdown
-            options={options}
-            onChange={(e) => {
-              setFrom(e.value);
-            }}
+            options={options.map((option) => ({ value: option, label: option }))}
+            onChange={handleFromChange}
             value={from}
             placeholder="From"
           />
@@ -91,11 +124,18 @@ function HomePage() {
         </div>
         <div className="right">
           <h3>Para</h3>
+          <div className="currency-input">
+            <input
+              type="text"
+              placeholder="Escolha uma moeda"
+              value={searchTo}
+              onChange={(e) => setSearchTo(e.target.value)}
+            />
+            <button onClick={filterToCurrencies}>Filtrar</button>
+          </div>
           <Dropdown
-            options={options}
-            onChange={(e) => {
-              setTo(e.value);
-            }}
+            options={options.map((option) => ({ value: option, label: option }))}
+            onChange={handleToChange}
             value={to}
             placeholder="To"
           />
@@ -104,6 +144,9 @@ function HomePage() {
       <div className="result">
         <h2>Valor convertido</h2>
         <p>{input + " " + from + " = " + output.toFixed(2) + " " + to}</p>
+        {lastUpdateTime && (
+            <p>Data da última conversão: {lastUpdateTime.toLocaleString()}</p>
+        )}
         <button onClick={saveConversion}>Salvar Conversão</button>
       </div>
       <HistoricoConversoes conversoesSalvas={savedConversions} />

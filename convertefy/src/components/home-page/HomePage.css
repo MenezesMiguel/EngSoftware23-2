@@ -59,6 +59,10 @@ input {
   text-align: center;
 }
 
+.result .lastUpdateTime {
+  color: #A5E264;
+}
+
 button {
   padding: 10px 20px;
   background-color: forestgreen;
