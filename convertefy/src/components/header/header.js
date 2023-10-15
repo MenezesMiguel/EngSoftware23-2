@@ -1,9 +1,21 @@
-import React from "react";
-import logo from "../../Images/logo2.png";
+import React, { useEffect, useState } from "react";
+import logo from "../../images/logo2.png";
 import "./header.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 function Header() {
+  const [user, setUser] = useState(localStorage.user);
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log(localStorage.user);
+  });
+
+  function logout() {
+    localStorage.clear();
+    setUser({});
+    navigate("/login");
+  }
+
   return (
     <div class="header">
       <div class="logo">
@@ -22,9 +34,15 @@ function Header() {
         </ul>
       </div>
       <div class="login-btn-header-container">
-        <button class="login-header-btn" onClick={() => console.log("aha")}>
-          <Link to="/login">Login</Link>
-        </button>
+        {user ? (
+          <button class="login-header-btn" onClick={() => logout()}>
+            <Link to="/">Logout</Link>
+          </button>
+        ) : (
+          <button class="login-header-btn">
+            <Link to="/login">Login</Link>
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./sign-in-wall.css";
+import React, { useState } from "react";
+import "./registerWall.css";
 
-function SignInWall() {
+function RegisterWall() {
   const [isActive, setIsActive] = useState(false);
   const [value, setValue] = useState("");
   const [email, setEmail] = useState();
+  const [emailConfirm, setEmailConfirm] = useState();
   const [password, setPassword] = useState();
-  const [user, setUser] = useState();
-  const navigate = useNavigate();
+  const user = {};
+
   function handleTextChange(text) {
     setValue(text);
 
@@ -19,38 +19,22 @@ function SignInWall() {
     }
   }
 
-  useEffect(() => {
+  function register() {
+    user.email = email;
+    user.password = password;
+
     fetch("http://localhost:3001/user", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(user);
-        setUser(data);
-      });
-  }, []);
-
-  function login() {
-    user.some((user) => {
-      if (user.email === email && user.password === password) {
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate("/");
-        return true;
-      }
+      body: JSON.stringify(user),
     });
   }
-
-  function redirect() {
-    navigate("/cadastro");
-  }
-
   return (
     <div class="signIncontainer">
       <div class="card" style={{ width: "18rem" }}>
-        <div class="card-header">Login</div>
+        <div class="card-header">Cadastre-se</div>
         <div class="card-body">
           <div class="line">
             <div id="float-label">
@@ -70,8 +54,22 @@ function SignInWall() {
           <div class="line">
             <div id="float-label">
               <input
+                type="email2"
+                value={emailConfirm}
+                onChange={(e) => {
+                  setEmailConfirm(e.target.value);
+                  handleTextChange(e.target.value);
+                }}
+              />
+              <label className={isActive ? "Active" : ""} htmlFor="email">
+                Confirme seu E-mail
+              </label>
+            </div>
+          </div>
+          <div class="line">
+            <div id="float-label">
+              <input
                 type="password"
-                value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                   handleTextChange(e.target.value);
@@ -82,11 +80,8 @@ function SignInWall() {
               </label>
             </div>
           </div>
-          <button class="login-header-btn" onClick={() => login()}>
-            Login
-          </button>
-          <button class="login-header-btn" onClick={(e) => redirect()}>
-            Cadastro
+          <button class="login-header-btn" onClick={() => register()}>
+            Junte-se
           </button>
         </div>
       </div>
@@ -94,4 +89,4 @@ function SignInWall() {
   );
 }
 
-export default SignInWall;
+export default RegisterWall;
