@@ -6,11 +6,14 @@ import "react-dropdown/style.css";
 import HistoricoConversoes from "../history/historyPage";
 import "./HomePage.css";
 
+import {ConvertCurrencyLatest, GetAllCurrencies} from '../../FrankfurterAPI.js';
+
+
 function HomePage() {
   const [info, setInfo] = useState({});
-  const [input, setInput] = useState(0);
-  const [from, setFrom] = useState("usd");
-  const [to, setTo] = useState("inr");
+  const [input, setInput] = useState(1);
+  const [from, setFrom] = useState("USD");
+  const [to, setTo] = useState("BRL");
   const [options, setOptions] = useState([]);
   const [output, setOutput] = useState(0);
   const [savedConversions, setSavedConversions] = useState([]);
@@ -19,18 +22,14 @@ function HomePage() {
   const [searchTo, setSearchTo] = useState(""); // Estado para pesquisa "Para"
 
   useEffect(() => {
-    axios
-      .get(
-        `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${from}.json`
-      )
-      .then((res) => {
-        setInfo(res.data[from]);
-        setLastUpdateTime(new Date());
-      });
+    GetAllCurrencies().then((res) => {
+      setInfo(res.currencyCodes);
+      setLastUpdateTime(new Date());
+    });
   }, [from]);
 
   useEffect(() => {
-    setOptions(Object.keys(info));
+    setOptions(Object.values(info));
     convert();
   }, [info, input, to]);
 
@@ -47,8 +46,9 @@ function HomePage() {
   }, [savedConversions]);
 
   function convert() {
-    var rate = info[to];
-    setOutput(input * rate);
+      ConvertCurrencyLatest(from, to, input).then((res) => {
+      setOutput(1 * res);
+    });
   }
 
   function flip() {
@@ -75,7 +75,7 @@ function HomePage() {
   }
 
   function filterFromCurrencies() {
-    const filteredFromOptions = Object.keys(info).filter((currency) =>
+    const filteredFromOptions = Object.values(info).filter((currency) =>
       currency.toLowerCase().includes(searchFrom.toLowerCase())
     );
     setOptions(filteredFromOptions);
