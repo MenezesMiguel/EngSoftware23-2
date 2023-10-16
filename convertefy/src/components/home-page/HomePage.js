@@ -6,14 +6,14 @@ import "react-dropdown/style.css";
 import HistoricoConversoes from "../history/historyPage";
 import "./HomePage.css";
 
-import {ConvertCurrencyLatest, GetAllCurrencies} from '../../FrankfurterAPI.js';
-
+import { ConvertCurrencyLatest, GetAllCurrencies } from '../../FrankfurterAPI.js';
 
 function HomePage() {
   const [info, setInfo] = useState({});
+  const [currencyNames, setCurrencyNames] = useState({});
   const [input, setInput] = useState(1);
-  const [from, setFrom] = useState("USD");
-  const [to, setTo] = useState("BRL");
+  const [from, setFrom] = useState({value:"USD",  label: "USD - United States Dollars"});
+  const [to, setTo] = useState({value:"BRL",  label: "BRL - Brazilian Real"});
   const [options, setOptions] = useState([]);
   const [output, setOutput] = useState(0);
   const [savedConversions, setSavedConversions] = useState([]);
@@ -24,14 +24,21 @@ function HomePage() {
   useEffect(() => {
     GetAllCurrencies().then((res) => {
       setInfo(res.currencyCodes);
+      setCurrencyNames(res.currencyNames);
       setLastUpdateTime(new Date());
     });
   }, [from]);
 
   useEffect(() => {
-    setOptions(Object.values(info));
+    const currencyOptions = Object.keys(info).map((code) => ({
+      value: `${info[code]}`,
+      label: `${info[code]} - ${currencyNames[code]}`
+    }));
+
+    setOptions(currencyOptions);
     convert();
-  }, [info, input, to]);
+  }, [info, input, to, currencyNames]);
+
 
   useEffect(() => {
     const savedConversionsStr = localStorage.getItem("savedConversions");
@@ -46,7 +53,7 @@ function HomePage() {
   }, [savedConversions]);
 
   function convert() {
-      ConvertCurrencyLatest(from, to, input).then((res) => {
+      ConvertCurrencyLatest(from.value, to.value, input).then((res) => {
       setOutput(1 * res);
     });
   }
@@ -67,26 +74,40 @@ function HomePage() {
   }
 
   function handleFromChange(selected) {
-    setFrom(selected.value);
+    setFrom(selected);
   }
 
   function handleToChange(selected) {
-    setTo(selected.value);
+    setTo(selected);
   }
 
   function filterFromCurrencies() {
-    const filteredFromOptions = Object.values(info).filter((currency) =>
-      currency.toLowerCase().includes(searchFrom.toLowerCase())
+    const formattedOptions = Object.keys(info).map((option) => ({
+      value: `${info[option]}`,
+      label: `${info[option]} - ${currencyNames[option]}`
+    }));
+  
+    const filteredFromOptions = formattedOptions.filter((option) =>
+      option.label.toLowerCase().includes(searchFrom.toLowerCase())
     );
+  
     setOptions(filteredFromOptions);
   }
-
+  
   function filterToCurrencies() {
-    const filteredToOptions = Object.keys(info).filter((currency) =>
-      currency.toLowerCase().includes(searchTo.toLowerCase())
+    const formattedOptions = Object.keys(info).map((option) => ({
+      value: `${info[option]}`,
+      label: `${info[option]} - ${currencyNames[option]}`
+    }));
+  
+    const filteredToOptions = formattedOptions.filter((option) =>
+      option.label.toLowerCase().includes(searchTo.toLowerCase())
     );
+  
     setOptions(filteredToOptions);
   }
+  
+  
 
   return (
     <div className="App">
@@ -112,7 +133,7 @@ function HomePage() {
             <button onClick={filterFromCurrencies}>Filtrar</button>
           </div>
           <Dropdown
-            options={options.map((option) => ({ value: option, label: option }))}
+            options={options}
             onChange={handleFromChange}
             value={from}
             placeholder="From"
@@ -138,7 +159,7 @@ function HomePage() {
             <button onClick={filterToCurrencies}>Filtrar</button>
           </div>
           <Dropdown
-            options={options.map((option) => ({ value: option, label: option }))}
+            options={options}
             onChange={handleToChange}
             value={to}
             placeholder="To"
@@ -147,7 +168,7 @@ function HomePage() {
       </div>
       <div className="result">
         <h2>Valor convertido</h2>
-        <p>{input + " " + from + " = " + output.toFixed(2) + " " + to}</p>
+        <p>{input + " " + from.value + " = " + output.toFixed(2) + " " + to.value}</p>
         {lastUpdateTime && (
             <p>Data da última conversão: {lastUpdateTime.toLocaleString()}</p>
         )}

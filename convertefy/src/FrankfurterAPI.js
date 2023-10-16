@@ -6,7 +6,7 @@ export const ConvertCurrencyLatest = async (from, to, amount) => {
   return result.toFixed(2);
 };
 
-const ConvertCurrencyHistorical = async (from, to, amount, date) => {
+export const ConvertCurrencyHistorical = async (from, to, amount, date) => {
   const response = await axios.get(`https://api.frankfurter.app/${date}?amount=${amount}&from=${from}&to=${to}`);
   const result = response.data.rates[to];
   return result.toFixed(2);
