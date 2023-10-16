@@ -6,33 +6,43 @@ import "react-dropdown/style.css";
 import HistoricoConversoes from "../history/historyPage";
 import "./HomePage.css";
 
+import { ConvertCurrencyLatest, GetAllCurrencies, GetHistory} from '../../FrankfurterAPI.js';
+import { Chart } from 'chart.js/auto';
+
 function HomePage() {
   const [info, setInfo] = useState({});
-  const [input, setInput] = useState(0);
-  const [from, setFrom] = useState("usd");
-  const [to, setTo] = useState("inr");
+  const [currencyNames, setCurrencyNames] = useState({});
+  const [graphsPoints, setGraphsPoints] = useState({});
+  const [input, setInput] = useState(1);
+  const [from, setFrom] = useState({value:"USD",  label: "USD - United States Dollars"});
+  const [to, setTo] = useState({value:"BRL",  label: "BRL - Brazilian Real"});
   const [options, setOptions] = useState([]);
   const [output, setOutput] = useState(0);
   const [savedConversions, setSavedConversions] = useState([]);
   const [lastUpdateTime, setLastUpdateTime] = useState(null);
   const [searchFrom, setSearchFrom] = useState(""); // Estado para pesquisa "De"
   const [searchTo, setSearchTo] = useState(""); // Estado para pesquisa "Para"
+  const [myChartRef] = useState({});
+
 
   useEffect(() => {
-    axios
-      .get(
-        `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${from}.json`
-      )
-      .then((res) => {
-        setInfo(res.data[from]);
-        setLastUpdateTime(new Date());
-      });
+    GetAllCurrencies().then((res) => {
+      setInfo(res.currencyCodes);
+      setCurrencyNames(res.currencyNames);
+      setLastUpdateTime(new Date());
+    });
   }, [from]);
 
   useEffect(() => {
-    setOptions(Object.keys(info));
+    const currencyOptions = Object.keys(info).map((code) => ({
+      value: `${info[code]}`,
+      label: `${info[code]} - ${currencyNames[code]}`
+    }));
+
+    setOptions(currencyOptions);
     convert();
-  }, [info, input, to]);
+  }, [info, input, to, currencyNames]);
+
 
   useEffect(() => {
     const savedConversionsStr = localStorage.getItem("savedConversions");
@@ -47,8 +57,13 @@ function HomePage() {
   }, [savedConversions]);
 
   function convert() {
-    var rate = info[to];
-    setOutput(input * rate);
+      ConvertCurrencyLatest(from.value, to.value, input).then((res) => {
+      setOutput(1 * res);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+    setInput(input);
   }
 
   function flip() {
@@ -57,36 +72,88 @@ function HomePage() {
     setTo(temp);
   }
 
-  function saveConversion(conversion) {
-    const savedConversion = `${input} ${from} = ${output.toFixed(2)} ${to}`;
-    // conversion.from = from;
-    // conversion.to = to;
-    // conversion.input = input;
-    // console.log(conversion);
+  function saveConversion() {
+    const savedConversion = `${input} ${from.value} = ${output.toFixed(2)} ${to.value}`;
     setSavedConversions([...savedConversions, savedConversion]);
   }
 
   function handleFromChange(selected) {
-    setFrom(selected.value);
+    if(selected.value !== to.value){
+      setFrom(selected);
+    }
   }
 
   function handleToChange(selected) {
-    setTo(selected.value);
+    if(selected.value !== from.value){
+      setTo(selected);
+    }
   }
 
   function filterFromCurrencies() {
-    const filteredFromOptions = Object.keys(info).filter((currency) =>
-      currency.toLowerCase().includes(searchFrom.toLowerCase())
+    const formattedOptions = Object.keys(info).map((option) => ({
+      value: `${info[option]}`,
+      label: `${info[option]} - ${currencyNames[option]}`
+    }));
+  
+    const filteredFromOptions = formattedOptions.filter((option) =>
+      option.label.toLowerCase().includes(searchFrom.toLowerCase())
     );
+  
     setOptions(filteredFromOptions);
   }
-
+  
   function filterToCurrencies() {
-    const filteredToOptions = Object.keys(info).filter((currency) =>
-      currency.toLowerCase().includes(searchTo.toLowerCase())
+    const formattedOptions = Object.keys(info).map((option) => ({
+      value: `${info[option]}`,
+      label: `${info[option]} - ${currencyNames[option]}`
+    }));
+  
+    const filteredToOptions = formattedOptions.filter((option) =>
+      option.label.toLowerCase().includes(searchTo.toLowerCase())
     );
+  
     setOptions(filteredToOptions);
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (from.value !== "BGN" && to.value !== 'BGL') {
+        const res = await GetHistory(from.value, to.value);
+        setGraphsPoints(res);
+    
+        const ctx = document.getElementById('myChart').getContext('2d');
+    
+        if (myChartRef.current) {
+          myChartRef.current.destroy(); // Destroy the existing chart
+        }
+    
+        myChartRef.current = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: res.datePoints,
+            datasets: [{
+              label: `1 ${from.value}`,
+              data: res.exchangeRates,
+              backgroundColor: 'rgba(75, 192, 192, 0)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2,
+              pointRadius: 0
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: false
+              }
+            }
+          }
+        });
+      };
+    }
+    fetchData();
+  }, [from.value, to.value]);
+  
+   
 
   return (
     <div className="App">
@@ -112,7 +179,7 @@ function HomePage() {
             <button onClick={filterFromCurrencies}>Filtrar</button>
           </div>
           <Dropdown
-            options={options.map((option) => ({ value: option, label: option }))}
+            options={options}
             onChange={handleFromChange}
             value={from}
             placeholder="From"
@@ -138,7 +205,7 @@ function HomePage() {
             <button onClick={filterToCurrencies}>Filtrar</button>
           </div>
           <Dropdown
-            options={options.map((option) => ({ value: option, label: option }))}
+            options={options}
             onChange={handleToChange}
             value={to}
             placeholder="To"
@@ -147,12 +214,15 @@ function HomePage() {
       </div>
       <div className="result">
         <h2>Valor convertido</h2>
-        <p>{input + " " + from + " = " + output.toFixed(2) + " " + to}</p>
+        <p>{input + " " + from.value + " = " + output.toFixed(2) + " " + to.value}</p>
         {lastUpdateTime && (
             <p>Data da última conversão: {lastUpdateTime.toLocaleString()}</p>
         )}
         <button onClick={saveConversion}>Salvar Conversão</button>
       </div>
+      <div className="graph-container">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>  
       <HistoricoConversoes conversoesSalvas={savedConversions} />
     </div>
   );
