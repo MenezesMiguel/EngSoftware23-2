@@ -50,7 +50,7 @@ Um programa de conversão de moedas que permite aos usuários converterem valore
 ### Como um usuário, quero ver em um gráfico o histórico de um ano da taxa de câmbio selecionada.
 - Exibir gráfico com eixo X de 1 ano e eixo Y com a comparação das moedas selecionadas [Felipe] - 6 SP
 - Comunicar com a API e filtrar os dados necessários para a visualização do gráfico [Felipe] - 4 SP
-### Como um usuário, quero poder fazer login na plataforma.
+### Como um usuário, quero poder fazer cadastro e login na plataforma.
 - Criar banco de dados em que os dados de login são armazenados [Eduardo] - 8 SP
 ### Como um usuário, quero visualizar meu histórico de conversão de câmbio.
 - Criar campo e página para que o histórico possa ser colocado [Raphael] - 3 SP
