@@ -22,6 +22,8 @@ function HomePage() {
   const [lastUpdateTime, setLastUpdateTime] = useState(null);
   const [searchFrom, setSearchFrom] = useState(""); // Estado para pesquisa "De"
   const [searchTo, setSearchTo] = useState(""); // Estado para pesquisa "Para"
+  const [myChartRef] = useState({});
+
 
   useEffect(() => {
     GetAllCurrencies().then((res) => {
@@ -112,43 +114,46 @@ function HomePage() {
   
     setOptions(filteredToOptions);
   }
-  
+
   useEffect(() => {
-    const ctx = document.getElementById('myChart').getContext('2d');
-
-    GetHistory(from.value, to.value).then((res) => {
-      setGraphsPoints(res);
-    });
-
-    console.log(`date: ${graphsPoints.datePoints[1]}`)
-    console.log(`date: ${graphsPoints.datePoints[1]}`)
-
-  
-    let myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: graphsPoints.datePoints,
-        datasets: [{
-          label: '# of Votes',
-          data: graphsPoints.exchangeRates,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: false
-          }
+    const fetchData = async () => {
+      if (from.value !== "BGN" && to.value !== 'BGL') {
+        const res = await GetHistory(from.value, to.value);
+        setGraphsPoints(res);
+    
+        const ctx = document.getElementById('myChart').getContext('2d');
+    
+        if (myChartRef.current) {
+          myChartRef.current.destroy(); // Destroy the existing chart
         }
-      }
-    });
-    return () => {
-      myChart.destroy();
-    };
-  }, []);
+    
+        myChartRef.current = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: res.datePoints,
+            datasets: [{
+              label: `1 ${from.value}`,
+              data: res.exchangeRates,
+              backgroundColor: 'rgba(75, 192, 192, 0)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2,
+              pointRadius: 0
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: false
+              }
+            }
+          }
+        });
+      };
+    }
+    fetchData();
+  }, [from.value, to.value]);
   
+   
 
   return (
     <div className="App">

@@ -20,7 +20,17 @@ export const GetAllCurrencies = async () => {
 };
 
 export const GetHistory = async (from, to) => {
-  const response = await axios.get(`https://api.frankfurter.app/2022-10-15..?from=${from}&to=${to}`);
+  const today = new Date();
+  const oneYearAgo = new Date(today);
+  oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+  const year = oneYearAgo.getFullYear();
+  const month = String(oneYearAgo.getMonth() + 1).padStart(2, '0'); // Adding 1 because getMonth() is zero-based
+  const day = String(oneYearAgo.getDate()).padStart(2, '0');
+  
+  const formattedDate = `${year}-${month}-${day}`;
+
+  const response = await axios.get(`https://api.frankfurter.app/${formattedDate}..?from=${from}&to=${to}`);
   const datePoints = Object.keys(response.data.rates);
   const exchangeRates = datePoints.map(datePoints => response.data.rates[datePoints][to]);
 
