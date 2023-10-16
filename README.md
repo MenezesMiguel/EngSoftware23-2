@@ -41,11 +41,16 @@ Um programa de conversão de moedas que permite aos usuários converterem valore
 - Fazer a fórmula para a conversão do valor escolhido [Raphael] - 4 SP
 
 ### Como um usuário, quero que o sistema calcule automaticamente o valor convertido.
-### Como um usuário, quero que o sistema calcule automaticamente o valor convertido.
+- Implementar uma fórmula para calcular o valor desejado [Raphael] - 2 SP
+- Implementar lógica do sistema para calcular o valor automaticamente [Raphael] - 3 SP
+- 
 ### Como um usuário, quero poder filtrar a lista de moedas por nome ou código.
-### Como um usuário, quero ver informações detalhadas sobre cada moeda, como símbolo e país.
-### Como um usuário, quero poder atualizar manualmente as taxas de câmbio.
+-Implementar lógica de filtro para nome ou código da moeda e o campo para tal [Raphael] - 5 SP
+
 ### Como um usuário, quero ver a data e hora da última atualização das taxas de câmbio.
+- Criar campo e lógica para que o sistema pegue a data atual sempre que houver uma atualização na conversão [Raphael] - 2 SP
+
 ### Como um usuário, quero ver em um gráfico o histórico da taxa de câmbio selecionada.
 ### Como um usuário, quero poder fazer login na plataforma.
 ### Como um usuário, quero visualizar meu histórico de conversão de câmbio.
+- Criar campo e página para que o histórico possa ser colocado [Raphael] - 3 SP
