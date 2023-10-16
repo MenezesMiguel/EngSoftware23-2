@@ -6,11 +6,13 @@ import "react-dropdown/style.css";
 import HistoricoConversoes from "../history/historyPage";
 import "./HomePage.css";
 
-import { ConvertCurrencyLatest, GetAllCurrencies } from '../../FrankfurterAPI.js';
+import { ConvertCurrencyLatest, GetAllCurrencies, GetHistory} from '../../FrankfurterAPI.js';
+import { Chart } from 'chart.js/auto';
 
 function HomePage() {
   const [info, setInfo] = useState({});
   const [currencyNames, setCurrencyNames] = useState({});
+  const [graphsPoints, setGraphsPoints] = useState({});
   const [input, setInput] = useState(1);
   const [from, setFrom] = useState({value:"USD",  label: "USD - United States Dollars"});
   const [to, setTo] = useState({value:"BRL",  label: "BRL - Brazilian Real"});
@@ -111,6 +113,41 @@ function HomePage() {
     setOptions(filteredToOptions);
   }
   
+  useEffect(() => {
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    GetHistory(from.value, to.value).then((res) => {
+      setGraphsPoints(res);
+    });
+
+    console.log(`date: ${graphsPoints.datePoints[1]}`)
+    console.log(`date: ${graphsPoints.datePoints[1]}`)
+
+  
+    let myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: graphsPoints.datePoints,
+        datasets: [{
+          label: '# of Votes',
+          data: graphsPoints.exchangeRates,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+    return () => {
+      myChart.destroy();
+    };
+  }, []);
   
 
   return (
@@ -178,6 +215,9 @@ function HomePage() {
         )}
         <button onClick={saveConversion}>Salvar Conversão</button>
       </div>
+      <div className="graph-container">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>  
       <HistoricoConversoes conversoesSalvas={savedConversions} />
     </div>
   );

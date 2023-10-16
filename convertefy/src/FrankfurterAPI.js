@@ -19,23 +19,25 @@ export const GetAllCurrencies = async () => {
   return {currencyCodes, currencyNames};
 };
 
+export const GetHistory = async (from, to) => {
+  const response = await axios.get(`https://api.frankfurter.app/2022-10-15..?from=${from}&to=${to}`);
+  const datePoints = Object.keys(response.data.rates);
+  const exchangeRates = datePoints.map(datePoints => response.data.rates[datePoints][to]);
+
+  return {datePoints, exchangeRates};
+};
+
 // const run = async () => {
 //   const from = 'USD';
-//   const to = 'BRL';
-//   const amount = 10;
-//   const date = '2012-01-05';
+//   const to = 'AUD';
 
-//   const {currencyCodes, currencyNames} = await GetAllCurrencies();
-//   const convertedAmount = await ConvertCurrencyLatest(from, to, amount);
-//   const convertedAmountHistorical = await ConvertCurrencyHistorical(from, to, amount, date);
-  
-//   for (let i = 0; i < currencyCodes.length; i++) {
-//     const code = currencyCodes[i];
-//     const name = currencyNames[i];
-//     console.log(`${name} (${code})`);
+//   const {datePoints, exchangeRates} = await GetHistory(from,to);
+
+//   for (let i = 0; i < datePoints.length; i++) {
+//     console.log(`value: ${datePoints[i]}`);
+//     console.log(`date: ${exchangeRates[1]}`)
 //   }
-//   console.log(`Now: ${amount} ${from} = ${convertedAmount} ${to}`);
-//   console.log(`In ${date}: ${amount} ${from} = ${convertedAmountHistorical} ${to}`);
+
 // };
 
 // run();
