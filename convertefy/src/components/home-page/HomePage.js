@@ -55,7 +55,11 @@ function HomePage() {
   function convert() {
       ConvertCurrencyLatest(from.value, to.value, input).then((res) => {
       setOutput(1 * res);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
     });
+    setInput("1");
   }
 
   function flip() {
