@@ -63,7 +63,7 @@ function HomePage() {
     .catch((error) => {
       console.error('Error:', error);
     });
-    setInput("1");
+    setInput(input);
   }
 
   function flip() {
@@ -72,12 +72,8 @@ function HomePage() {
     setTo(temp);
   }
 
-  function saveConversion(conversion) {
-    const savedConversion = `${input} ${from} = ${output.toFixed(2)} ${to}`;
-    // conversion.from = from;
-    // conversion.to = to;
-    // conversion.input = input;
-    // console.log(conversion);
+  function saveConversion() {
+    const savedConversion = `${input} ${from.value} = ${output.toFixed(2)} ${to.value}`;
     setSavedConversions([...savedConversions, savedConversion]);
   }
 
