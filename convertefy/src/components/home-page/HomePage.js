@@ -82,11 +82,15 @@ function HomePage() {
   }
 
   function handleFromChange(selected) {
-    setFrom(selected);
+    if(selected.value !== to.value){
+      setFrom(selected);
+    }
   }
 
   function handleToChange(selected) {
-    setTo(selected);
+    if(selected.value !== from.value){
+      setTo(selected);
+    }
   }
 
   function filterFromCurrencies() {
